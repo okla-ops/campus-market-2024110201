@@ -1,13 +1,13 @@
 <script setup lang="ts">
-// 首页 — 欢迎页，后续可添加推荐商品、快捷入口等
+// 拼单互助页面 — 后续可添加拼单卡片、组队入口等
 </script>
 
 <template>
   <section class="page">
-    <h2>首页</h2>
+    <h2>拼单互助</h2>
     <div class="placeholder">
-      <p>欢迎来到校园轻集市</p>
-      <p class="hint">此处后续将展示推荐内容与快捷入口</p>
+      <p>拼单与互助信息区域</p>
+      <p class="hint">此处后续将展示拼单卡片与组队入口</p>
     </div>
   </section>
 </template>

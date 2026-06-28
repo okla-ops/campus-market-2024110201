@@ -1,13 +1,13 @@
 <script setup lang="ts">
-// 首页 — 欢迎页，后续可添加推荐商品、快捷入口等
+// 跑腿代办页面 — 后续可添加代办任务列表、发布委托等
 </script>
 
 <template>
   <section class="page">
-    <h2>首页</h2>
+    <h2>跑腿代办</h2>
     <div class="placeholder">
-      <p>欢迎来到校园轻集市</p>
-      <p class="hint">此处后续将展示推荐内容与快捷入口</p>
+      <p>跑腿代办任务区域</p>
+      <p class="hint">此处后续将展示代办任务与发布委托入口</p>
     </div>
   </section>
 </template>

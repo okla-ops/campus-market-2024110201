@@ -1,13 +1,13 @@
 <script setup lang="ts">
-// 首页 — 欢迎页，后续可添加推荐商品、快捷入口等
+// 二手交易专区 — 后续可添加商品列表、搜索筛选等
 </script>
 
 <template>
   <section class="page">
-    <h2>首页</h2>
+    <h2>二手交易专区</h2>
     <div class="placeholder">
-      <p>欢迎来到校园轻集市</p>
-      <p class="hint">此处后续将展示推荐内容与快捷入口</p>
+      <p>二手商品展示区域</p>
+      <p class="hint">此处后续将展示商品卡片、搜索栏与分类筛选</p>
     </div>
   </section>
 </template>

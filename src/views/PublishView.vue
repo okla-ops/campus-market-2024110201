@@ -1,10 +1,28 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+// 信息发布页 — 后续可添加发布表单（二手/失物/拼单/跑腿）
+</script>
 
 <template>
-  <section>
-    <h2>发布商品</h2>
-    <p>填写商品信息进行发布</p>
+  <section class="page">
+    <h2>信息发布</h2>
+    <div class="placeholder">
+      <p>发布信息区域</p>
+      <p class="hint">此处后续将展示发布表单（二手/失物/拼单/跑腿）</p>
+    </div>
   </section>
 </template>
 
-<style scoped></style>
+<style scoped>
+.page { padding-bottom: 32px; }
+h2 { margin: 0 0 20px; color: #0c1424; font-size: 22px; }
+.placeholder {
+  padding: 80px 32px;
+  text-align: center;
+  background: rgba(255,255,255,0.6);
+  border-radius: 12px;
+  border: 2px dashed rgba(180,212,245,0.4);
+  color: #6a8bb0;
+}
+.placeholder p { margin: 0 0 8px; font-size: 18px; }
+.hint { font-size: 13px !important; color: #a0b8d0; }
+</style>

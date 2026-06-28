@@ -1,13 +1,13 @@
 <script setup lang="ts">
-// 首页 — 欢迎页，后续可添加推荐商品、快捷入口等
+// 失物认领板块 — 后续可添加失物卡片、发布认领等
 </script>
 
 <template>
   <section class="page">
-    <h2>首页</h2>
+    <h2>失物认领板块</h2>
     <div class="placeholder">
-      <p>欢迎来到校园轻集市</p>
-      <p class="hint">此处后续将展示推荐内容与快捷入口</p>
+      <p>失物招领与认领区域</p>
+      <p class="hint">此处后续将展示失物卡片与发布认领入口</p>
     </div>
   </section>
 </template>
