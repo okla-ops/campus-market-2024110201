@@ -3,7 +3,7 @@
  * 嵌套路由 + 公共布局 + 懒加载 + 404 兜底
  */
 import { createRouter, createWebHistory } from 'vue-router'
-import MainLayout from '@/layouts/MainLayout.vue'
+import AppLayout from '@/components/AppLayout.vue'
 import { setupRouterGuard } from './guard'
 
 const router = createRouter({
@@ -11,7 +11,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      component: MainLayout,
+      component: AppLayout,
       redirect: '/home',
       children: [
         {
@@ -60,7 +60,7 @@ const router = createRouter({
           path: 'profile',
           name: 'profile',
           meta: { title: '个人主页' },
-          component: () => import('../views/ProfileView.vue'),
+          component: () => import('../views/UserCenterView.vue'),
         },
       ],
     },
