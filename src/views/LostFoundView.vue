@@ -1,28 +1,99 @@
 <script setup lang="ts">
-// 失物认领板块 — 后续可添加失物卡片、发布认领等
+import { ref, computed, onMounted } from 'vue'
+import { getLostFounds } from '@/api/lostFound'
+import type { LostFound } from '@/types'
+import ItemCard from '@/components/ItemCard.vue'
+import EmptyState from '@/components/EmptyState.vue'
+
+const items = ref<LostFound[]>([])
+const loading = ref(true)
+const error = ref('')
+
+onMounted(async () => {
+  try {
+    const res = await getLostFounds()
+    items.value = res.data
+  } catch {
+    error.value = '数据加载失败，请确认 Mock 服务已启动'
+  } finally {
+    loading.value = false
+  }
+})
+
+const lostItems = computed(() => items.value.filter((i) => i.type === '丢失'))
+const foundItems = computed(() => items.value.filter((i) => i.type === '捡到'))
 </script>
 
 <template>
   <section class="page">
     <h2>失物认领板块</h2>
-    <div class="placeholder">
-      <p>失物招领与认领区域</p>
-      <p class="hint">此处后续将展示失物卡片与发布认领入口</p>
-    </div>
+    <div v-if="loading" class="state-msg">加载中...</div>
+    <div v-else-if="error" class="state-msg error">{{ error }}</div>
+    <template v-else>
+      <section class="section">
+        <h3 class="section-title">
+          <span class="dot dot-lost"></span> 寻物启事 ({{ lostItems.length }})
+        </h3>
+        <EmptyState v-if="!lostItems.length" message="暂无寻物信息" />
+        <div v-else class="card-list">
+          <ItemCard
+            v-for="item in lostItems"
+            :key="item.id"
+            :title="item.title"
+            :subtitle="item.itemName"
+            :status-text="item.status === 'open' ? '寻找中' : '已找到'"
+            :status-type="item.status"
+            :meta="[`地点：${item.location}`, `时间：${item.lostTime}`, `联系人：${item.contact}`]"
+            :description="item.description"
+          />
+        </div>
+      </section>
+
+      <section class="section">
+        <h3 class="section-title">
+          <span class="dot dot-found"></span> 失物招领 ({{ foundItems.length }})
+        </h3>
+        <EmptyState v-if="!foundItems.length" message="暂无招领信息" />
+        <div v-else class="card-list">
+          <ItemCard
+            v-for="item in foundItems"
+            :key="item.id"
+            :title="item.title"
+            :subtitle="item.itemName"
+            :status-text="item.status === 'open' ? '待认领' : '已认领'"
+            :status-type="item.status"
+            :meta="[`地点：${item.location}`, `时间：${item.foundTime}`, `联系人：${item.contact}`]"
+            :description="item.description"
+          />
+        </div>
+      </section>
+    </template>
   </section>
 </template>
 
 <style scoped>
 .page { padding-bottom: 32px; }
 h2 { margin: 0 0 20px; color: #0c1424; font-size: 22px; }
-.placeholder {
-  padding: 80px 32px;
-  text-align: center;
-  background: rgba(255,255,255,0.6);
-  border-radius: 12px;
-  border: 2px dashed rgba(180,212,245,0.4);
-  color: #6a8bb0;
+.state-msg { text-align: center; color: #6a8bb0; padding: 40px; }
+.state-msg.error { color: #c0392b; }
+
+.section { margin-bottom: 28px; }
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-size: 16px;
+  color: #0c1424;
 }
-.placeholder p { margin: 0 0 8px; font-size: 18px; }
-.hint { font-size: 13px !important; color: #a0b8d0; }
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.dot-lost { background: #f8d7e3; }
+.dot-found { background: #b4d4f5; }
+
+.card-list { display: flex; flex-direction: column; gap: 12px; }
 </style>

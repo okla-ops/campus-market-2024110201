@@ -1,13 +1,51 @@
 <script setup lang="ts">
-// 二手交易专区 — 后续可添加商品列表、搜索筛选等
+import { ref, onMounted } from 'vue'
+import { getTrades } from '@/api/trade'
+import type { Trade } from '@/types'
+import ItemCard from '@/components/ItemCard.vue'
+import EmptyState from '@/components/EmptyState.vue'
+
+const trades = ref<Trade[]>([])
+const loading = ref(true)
+const error = ref('')
+
+onMounted(async () => {
+  try {
+    const res = await getTrades()
+    trades.value = res.data
+  } catch {
+    error.value = '数据加载失败，请确认 Mock 服务已启动'
+  } finally {
+    loading.value = false
+  }
+})
+
+function formatPrice(p: number): string {
+  return `¥${p.toFixed(2)}`
+}
 </script>
 
 <template>
   <section class="page">
     <h2>二手交易专区</h2>
-    <div class="placeholder">
-      <p>二手商品展示区域</p>
-      <p class="hint">此处后续将展示商品卡片、搜索栏与分类筛选</p>
+    <div v-if="loading" class="state-msg">加载中...</div>
+    <div v-else-if="error" class="state-msg error">{{ error }}</div>
+    <EmptyState v-else-if="!trades.length" />
+    <div v-else class="card-grid">
+      <ItemCard
+        v-for="item in trades"
+        :key="item.id"
+        :title="item.title"
+        :tags="[
+          { label: item.category },
+          { label: item.condition },
+        ]"
+        :status-text="item.status === 'open' ? '在售' : '已下架'"
+        :status-type="item.status"
+        :extra="formatPrice(item.price)"
+        :meta="[item.publisher, item.location, item.publishedAt]"
+        :description="item.description"
+      />
     </div>
   </section>
 </template>
@@ -15,14 +53,11 @@
 <style scoped>
 .page { padding-bottom: 32px; }
 h2 { margin: 0 0 20px; color: #0c1424; font-size: 22px; }
-.placeholder {
-  padding: 80px 32px;
-  text-align: center;
-  background: rgba(255,255,255,0.6);
-  border-radius: 12px;
-  border: 2px dashed rgba(180,212,245,0.4);
-  color: #6a8bb0;
+.state-msg { text-align: center; color: #6a8bb0; padding: 40px; }
+.state-msg.error { color: #c0392b; }
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
 }
-.placeholder p { margin: 0 0 8px; font-size: 18px; }
-.hint { font-size: 13px !important; color: #a0b8d0; }
 </style>
