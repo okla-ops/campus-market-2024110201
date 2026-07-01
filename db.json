@@ -1,9 +1,9 @@
 {
   "trades": [
     {
-      "id": 1,
+      "id": "1",
       "title": "高等数学第七版 同济大学",
-      "price": 25.00,
+      "price": 25,
       "category": "教材",
       "condition": "九成新",
       "publisher": "张同学",
@@ -14,9 +14,9 @@
       "description": "考研用书，内页无笔记，书角轻微磨损，不影响阅读。"
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "漫步者蓝牙耳机 W820NB",
-      "price": 89.00,
+      "price": 89,
       "category": "数码",
       "condition": "全新",
       "publisher": "李同学",
@@ -27,9 +27,9 @@
       "description": "双十一囤货买多了，全新未拆封，黑色款。"
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "折叠小桌板 床上书桌",
-      "price": 35.00,
+      "price": 35,
       "category": "生活",
       "condition": "七成新",
       "publisher": "王同学",
@@ -40,9 +40,9 @@
       "description": "用了半年，桌面有轻微划痕，结构完好，适合宿舍使用。"
     },
     {
-      "id": 4,
+      "id": "4",
       "title": "C语言程序设计 第四版",
-      "price": 18.00,
+      "price": 18,
       "category": "教材",
       "condition": "八成新",
       "publisher": "赵同学",
@@ -53,9 +53,9 @@
       "description": "已过考试，低价出给学弟学妹，前几页有铅笔标注。"
     },
     {
-      "id": 5,
+      "id": "5",
       "title": "羽毛球拍 川崎 均衡型",
-      "price": 120.00,
+      "price": 120,
       "category": "运动",
       "condition": "九五成新",
       "publisher": "陈同学",
@@ -66,9 +66,9 @@
       "description": "只打过两次，带原装球拍套，适合入门选手。"
     },
     {
-      "id": 6,
+      "id": "6",
       "title": "宿舍小冰箱 42L",
-      "price": 200.00,
+      "price": 200,
       "category": "生活",
       "condition": "六成新",
       "publisher": "刘同学",
@@ -79,10 +79,9 @@
       "description": "毕业季出的，制冷效果正常，外观有正常使用痕迹。"
     }
   ],
-
   "lostFounds": [
     {
-      "id": 1,
+      "id": "1",
       "title": "一串钥匙丢失 求好心人归还",
       "type": "丢失",
       "itemName": "钥匙串（含U盘）",
@@ -93,7 +92,7 @@
       "status": "open"
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "捡到黑色钱包一个",
       "type": "捡到",
       "itemName": "黑色短款钱包",
@@ -104,7 +103,7 @@
       "status": "open"
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "校园卡丢失",
       "type": "丢失",
       "itemName": "校园一卡通",
@@ -115,7 +114,7 @@
       "status": "open"
     },
     {
-      "id": 4,
+      "id": "4",
       "title": "捡到白色充电宝",
       "type": "捡到",
       "itemName": "小米充电宝 20000mAh",
@@ -127,7 +126,7 @@
       "remark": "已归还失主"
     },
     {
-      "id": 5,
+      "id": "5",
       "title": "灰色围巾遗失",
       "type": "丢失",
       "itemName": "针织灰色围巾",
@@ -138,10 +137,9 @@
       "status": "open"
     }
   ],
-
   "groupBuys": [
     {
-      "id": 1,
+      "id": "1",
       "title": "水果拼单 每日鲜切水果盒",
       "type": "水果",
       "targetCount": 10,
@@ -153,7 +151,7 @@
       "description": "每日鲜果店拼单，满10份送2份，人均约8元/份。"
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "奶茶拼单 一点点买五送一",
       "type": "饮品",
       "targetCount": 6,
@@ -165,7 +163,7 @@
       "description": "买五送一已结束。"
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "打印拼单 期末复习资料",
       "type": "学习",
       "targetCount": 8,
@@ -177,7 +175,7 @@
       "description": "高数+线代复习资料合印，A4双面黑白，满8人每份仅5元。"
     },
     {
-      "id": 4,
+      "id": "4",
       "title": "拼单买零食 良品铺子满减",
       "type": "零食",
       "targetCount": 5,
@@ -189,7 +187,7 @@
       "description": "良品铺子满199减30，凑单平分优惠，预计每人省6元。"
     },
     {
-      "id": 5,
+      "id": "5",
       "title": "团建拼单 烤肉套餐",
       "type": "聚餐",
       "targetCount": 8,
@@ -201,13 +199,12 @@
       "description": "8人套餐原价688，拼单每人仅需86元，含小料饮品。"
     }
   ],
-
   "errands": [
     {
-      "id": 1,
+      "id": "1",
       "title": "帮忙取个快递 中通",
       "taskType": "取快递",
-      "reward": 3.00,
+      "reward": 3,
       "pickup": "菜鸟驿站（北苑）",
       "delivery": "信息学院一楼大厅",
       "deadline": "2026-06-27 17:00",
@@ -216,10 +213,10 @@
       "description": "快递不大，一个信封大小，送到信息学院一楼即可。"
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "帮带早餐 二食堂小笼包",
       "taskType": "帮带餐",
-      "reward": 2.00,
+      "reward": 2,
       "pickup": "二食堂一楼",
       "delivery": "南苑7栋302",
       "deadline": "2026-06-27 08:30",
@@ -228,10 +225,10 @@
       "description": "一屉小笼包+一杯豆浆，送到宿舍楼下打电话我下来拿。"
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "去打印店取复习资料",
       "taskType": "取文件",
-      "reward": 4.00,
+      "reward": 4,
       "pickup": "学校打印店（东门）",
       "delivery": "图书馆二楼",
       "deadline": "2026-06-28 10:00",
@@ -240,10 +237,10 @@
       "description": "已付款，报手机尾号 6789 即可取件，A4纸袋装。"
     },
     {
-      "id": 4,
+      "id": "4",
       "title": "超市代买 可乐和薯片",
       "taskType": "代买",
-      "reward": 3.00,
+      "reward": 3,
       "pickup": "教育超市",
       "delivery": "北苑3栋206",
       "deadline": "2026-06-27 20:00",
@@ -252,10 +249,10 @@
       "description": "2瓶可口可乐+1包乐事原味薯片，费用我先转你。"
     },
     {
-      "id": 5,
+      "id": "5",
       "title": "帮退快递 韵达已取件",
       "taskType": "退快递",
-      "reward": 5.00,
+      "reward": 5,
       "pickup": "西苑6栋509",
       "delivery": "韵达快递点（校门口）",
       "deadline": "2026-06-27 15:00",
@@ -263,12 +260,24 @@
       "status": "done",
       "description": "快递已打包好放门口，扫码取件码发你微信，送到快递点即可。",
       "remark": "已完成"
+    },
+    {
+      "title": "西辉门取快递",
+      "location": "西辉门",
+      "description": "12-12-12",
+      "status": "open",
+      "publisher": "张同学",
+      "taskType": "取快递",
+      "reward": 4,
+      "pickup": "菜鸟",
+      "delivery": "东13楼",
+      "deadline": "2026-07-01T14:39",
+      "id": "TRyPGO-Y4nQ"
     }
   ],
-
   "messages": [
     {
-      "id": 1,
+      "id": "1",
       "avatar": "",
       "nickname": "赵同学",
       "lastMsg": "你好，高数书还在吗？",
@@ -276,7 +285,7 @@
       "unread": 2
     },
     {
-      "id": 2,
+      "id": "2",
       "avatar": "",
       "nickname": "李同学",
       "lastMsg": "耳机已经出了，不好意思",
@@ -284,7 +293,7 @@
       "unread": 0
     },
     {
-      "id": 3,
+      "id": "3",
       "avatar": "",
       "nickname": "王同学",
       "lastMsg": "拼单还差两个人，一起吗？",
@@ -292,7 +301,7 @@
       "unread": 1
     },
     {
-      "id": 4,
+      "id": "4",
       "avatar": "",
       "nickname": "刘同学",
       "lastMsg": "快递拿到了，放在一楼大厅了",
@@ -300,7 +309,7 @@
       "unread": 0
     },
     {
-      "id": 5,
+      "id": "5",
       "avatar": "",
       "nickname": "陈同学",
       "lastMsg": "羽毛球拍能小刀吗？",
@@ -308,7 +317,7 @@
       "unread": 0
     },
     {
-      "id": 6,
+      "id": "6",
       "avatar": "",
       "nickname": "失物招领",
       "lastMsg": "你的校园卡已被捡到，请到值班室认领",
@@ -316,7 +325,6 @@
       "unread": 0
     }
   ],
-
   "profile": {
     "id": 1,
     "nickname": "张同学",
@@ -325,5 +333,6 @@
     "college": "信息科学与技术学院",
     "phone": "138****1234",
     "publishedCount": 3
-  }
+  },
+  "$schema": "./node_modules/json-server/schema.json"
 }
