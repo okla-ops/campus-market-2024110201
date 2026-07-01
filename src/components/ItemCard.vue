@@ -44,6 +44,9 @@ defineProps<CardProps>()
     </div>
 
     <p v-if="description" class="desc">{{ description }}</p>
+    <div v-if="$slots.footer" class="card-footer">
+      <slot name="footer" />
+    </div>
   </article>
 </template>
 
@@ -123,4 +126,9 @@ defineProps<CardProps>()
 }
 
 .desc { margin: 0; font-size: 13px; color: #6a8bb0; line-height: 1.5; }
+.card-footer {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(180,212,245,0.2);
+}
 </style>

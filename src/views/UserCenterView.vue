@@ -1,18 +1,35 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { getProfile } from '@/api/profile'
-import type { Profile } from '@/types'
+import { useUserStore } from '@/stores/user'
+import { useFavoriteStore } from '@/stores/favorite'
+import { getTrades } from '@/api/trade'
+import { getLostFounds } from '@/api/lostFound'
+import { getGroupBuys } from '@/api/groupBuy'
+import { getErrands } from '@/api/errand'
+import EmptyState from '@/components/EmptyState.vue'
 
-const profile = ref<Profile | null>(null)
+const user = useUserStore()
+const fav = useFavoriteStore()
+
 const loading = ref(true)
-const error = ref('')
+const myPublishCount = ref(0)
 
 onMounted(async () => {
   try {
-    const res = await getProfile()
-    profile.value = res.data
+    const [trades, lost, buys, errs] = await Promise.all([
+      getTrades(),
+      getLostFounds(),
+      getGroupBuys(),
+      getErrands(),
+    ])
+    const me = user.nickname
+    myPublishCount.value =
+      trades.data.filter((i) => i.publisher === me).length +
+      lost.data.filter((i) => i.publisher === me).length +
+      buys.data.filter((i) => i.publisher === me).length +
+      errs.data.filter((i) => i.publisher === me).length
   } catch {
-    error.value = '数据加载失败，请确认 Mock 服务已启动'
+    // 静默处理
   } finally {
     loading.value = false
   }
@@ -22,51 +39,60 @@ onMounted(async () => {
 <template>
   <section class="page">
     <h2>个人主页</h2>
-    <div v-if="loading" class="state-msg">加载中...</div>
-    <div v-else-if="error" class="state-msg error">{{ error }}</div>
-    <template v-else-if="profile">
-      <div class="profile-card">
-        <div class="avatar">{{ profile.nickname.charAt(0) }}</div>
-        <h3>{{ profile.nickname }}</h3>
-        <div class="profile-info">
-          <div class="info-row"><span class="info-label">学号</span><span>{{ profile.studentId }}</span></div>
-          <div class="info-row"><span class="info-label">学院</span><span>{{ profile.college }}</span></div>
-          <div class="info-row"><span class="info-label">手机</span><span>{{ profile.phone }}</span></div>
-        </div>
-      </div>
 
-      <div class="menu-list">
-        <router-link to="/publish" class="menu-item">
-          <span class="menu-icon">📝</span>
-          <span class="menu-label">我的发布</span>
-          <span class="menu-count">{{ profile.publishedCount }}</span>
-          <span class="menu-arrow">›</span>
-        </router-link>
-        <div class="menu-item">
-          <span class="menu-icon">⭐</span>
-          <span class="menu-label">我的收藏</span>
-          <span class="menu-arrow">›</span>
-        </div>
-        <div class="menu-item">
-          <span class="menu-icon">⚙️</span>
-          <span class="menu-label">账号设置</span>
-          <span class="menu-arrow">›</span>
-        </div>
-        <div class="menu-item">
-          <span class="menu-icon">📖</span>
-          <span class="menu-label">使用帮助</span>
-          <span class="menu-arrow">›</span>
+    <div class="profile-card">
+      <div class="avatar">{{ user.initial }}</div>
+      <h3>{{ user.nickname }}</h3>
+      <div class="profile-info">
+        <div class="info-row"><span class="info-label">学号</span><span>{{ user.studentId }}</span></div>
+        <div class="info-row"><span class="info-label">学院</span><span>{{ user.college }}</span></div>
+        <div class="info-row"><span class="info-label">手机</span><span>{{ user.phone }}</span></div>
+      </div>
+    </div>
+
+    <div class="menu-list">
+      <router-link to="/publish" class="menu-item">
+        <span class="menu-icon">📝</span>
+        <span class="menu-label">我的发布</span>
+        <span class="menu-count">{{ loading ? '...' : myPublishCount }}</span>
+        <span class="menu-arrow">›</span>
+      </router-link>
+      <router-link to="/trade" class="menu-item">
+        <span class="menu-icon">⭐</span>
+        <span class="menu-label">我的收藏</span>
+        <span class="menu-count" v-if="fav.count">{{ fav.count }}</span>
+        <span class="menu-arrow">›</span>
+      </router-link>
+      <div class="menu-item">
+        <span class="menu-icon">⚙️</span>
+        <span class="menu-label">账号设置</span>
+        <span class="menu-arrow">›</span>
+      </div>
+      <div class="menu-item">
+        <span class="menu-icon">📖</span>
+        <span class="menu-label">使用帮助</span>
+        <span class="menu-arrow">›</span>
+      </div>
+    </div>
+
+    <div class="fav-section" v-if="fav.count">
+      <h3>我的收藏 ({{ fav.count }})</h3>
+      <div class="fav-list">
+        <div v-for="item in fav.items" :key="`${item.type}-${item.id}`" class="fav-item">
+          <span class="fav-type">{{ item.type }}</span>
+          <span class="fav-title">{{ item.title }}</span>
+          <button class="fav-remove" @click="fav.toggle(item.type, item.id, item.title)">取消</button>
         </div>
       </div>
-    </template>
+    </div>
+    <EmptyState v-else message="暂无收藏" />
   </section>
 </template>
 
 <style scoped>
-.page { padding-bottom: 32px; }
+.page { padding-bottom: 32px; max-width: 600px; }
 h2 { margin: 0 0 20px; color: #0c1424; font-size: 22px; }
-.state-msg { text-align: center; color: #6a8bb0; padding: 40px; }
-.state-msg.error { color: #c0392b; }
+h3 { margin: 0 0 12px; font-size: 15px; color: #0c1424; }
 
 .profile-card {
   text-align: center;
@@ -101,7 +127,7 @@ h2 { margin: 0 0 20px; color: #0c1424; font-size: 22px; }
 .info-row:last-child { border-bottom: none; }
 .info-label { color: #6a8bb0; }
 
-.menu-list { display: flex; flex-direction: column; gap: 8px; }
+.menu-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
 .menu-item {
   display: flex;
   align-items: center;
@@ -113,6 +139,7 @@ h2 { margin: 0 0 20px; color: #0c1424; font-size: 22px; }
   text-decoration: none;
   cursor: pointer;
   transition: background 0.2s;
+  color: inherit;
 }
 .menu-item:hover { background: rgba(255,255,255,0.95); }
 .menu-icon { font-size: 18px; }
@@ -125,4 +152,40 @@ h2 { margin: 0 0 20px; color: #0c1424; font-size: 22px; }
   border-radius: 8px;
 }
 .menu-arrow { font-size: 18px; color: #a0b8d0; }
+
+.fav-section {
+  background: rgba(255,255,255,0.85);
+  border-radius: 12px;
+  padding: 18px;
+  border: 1px solid rgba(180,212,245,0.3);
+}
+.fav-list { display: flex; flex-direction: column; gap: 8px; }
+.fav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(240,247,254,0.4);
+  border-radius: 8px;
+  font-size: 13px;
+}
+.fav-type {
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #b4d4f5;
+  color: #fff;
+  white-space: nowrap;
+}
+.fav-title { flex: 1; color: #0c1424; }
+.fav-remove {
+  padding: 2px 10px;
+  border: 1px solid rgba(248,215,227,0.5);
+  border-radius: 6px;
+  background: transparent;
+  font-size: 12px;
+  cursor: pointer;
+  color: #c0392b;
+}
+.fav-remove:hover { background: #fdecea; }
 </style>

@@ -6,8 +6,10 @@ import { addLostFound } from '@/api/lostFound'
 import { addGroupBuy } from '@/api/groupBuy'
 import { addErrand } from '@/api/errand'
 import FormField from '@/components/FormField.vue'
+import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
+const user = useUserStore()
 
 const activeType = ref<'trade' | 'lostfound' | 'groupbuy' | 'errand'>('trade')
 const submitting = ref(false)
@@ -111,7 +113,7 @@ async function handleSubmit() {
       location: form.location.trim(),
       description: form.description.trim(),
       status: 'open' as const,
-      publisher: '张同学',
+      publisher: user.nickname,
     }
 
     switch (activeType.value) {
