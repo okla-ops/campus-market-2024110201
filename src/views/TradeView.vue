@@ -102,7 +102,7 @@ h2 { margin: 0 0 20px; color: #0c1424; font-size: 22px; }
   color: #6a8bb0;
   transition: all 0.2s;
 }
-.fav-btn:hover { background: rgba(248,215,227,0.3); }
+.fav-btn:hover { background: rgba(248,215,227,0.3); transform: scale(1.05); }
 .fav-btn.active {
   background: #f8d7e3;
   border-color: #f8d7e3;

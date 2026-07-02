@@ -77,6 +77,19 @@
       "images": [],
       "status": "open",
       "description": "毕业季出的，制冷效果正常，外观有正常使用痕迹。"
+    },
+    {
+      "title": "1",
+      "location": "1",
+      "description": "没用过的书",
+      "status": "open",
+      "publisher": "川师",
+      "category": "1",
+      "price": 1,
+      "condition": "9",
+      "publishedAt": "2026-07-02",
+      "images": [],
+      "id": "tCvaSt4V4Es"
     }
   ],
   "lostFounds": [
@@ -358,6 +371,14 @@
       "college": "数学与统计学院",
       "phone": "137****9012",
       "password": "123456"
+    },
+    {
+      "nickname": "川师",
+      "studentId": "2024110201",
+      "college": "计算机科学学院",
+      "phone": "待补充",
+      "password": "3344ynljy",
+      "id": "yjIYF_uNkEo"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
