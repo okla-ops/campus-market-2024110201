@@ -1,17 +1,35 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { getTrades } from '@/api/trade'
 import type { Trade } from '@/types'
 import ItemCard from '@/components/ItemCard.vue'
 import EmptyState from '@/components/EmptyState.vue'
+import LoadingState from '@/components/LoadingState.vue'
+import ErrorState from '@/components/ErrorState.vue'
+import SearchBar from '@/components/SearchBar.vue'
 import { useFavoriteStore } from '@/stores/favorite'
 
 const fav = useFavoriteStore()
 const trades = ref<Trade[]>([])
 const loading = ref(true)
 const error = ref('')
+const keyword = ref('')
 
-onMounted(async () => {
+const filteredTrades = computed(() => {
+  if (!keyword.value.trim()) return trades.value
+  const q = keyword.value.trim().toLowerCase()
+  return trades.value.filter(
+    (item) =>
+      item.title.toLowerCase().includes(q) ||
+      item.description.toLowerCase().includes(q) ||
+      item.category.toLowerCase().includes(q) ||
+      item.location.toLowerCase().includes(q)
+  )
+})
+
+async function fetchData() {
+  loading.value = true
+  error.value = ''
   try {
     const res = await getTrades()
     trades.value = res.data
@@ -20,7 +38,9 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
-})
+}
+
+onMounted(fetchData)
 
 function formatPrice(p: number): string {
   return `¥${p.toFixed(2)}`
@@ -30,12 +50,15 @@ function formatPrice(p: number): string {
 <template>
   <section class="page">
     <h2>二手交易专区</h2>
-    <div v-if="loading" class="state-msg">加载中...</div>
-    <div v-else-if="error" class="state-msg error">{{ error }}</div>
-    <EmptyState v-else-if="!trades.length" />
+
+    <SearchBar v-model="keyword" placeholder="搜索标题、描述、分类、地点..." />
+
+    <LoadingState v-if="loading" />
+    <ErrorState v-else-if="error" @retry="fetchData" />
+    <EmptyState v-else-if="!filteredTrades.length" message="没有找到匹配的商品" />
     <div v-else class="card-grid">
       <ItemCard
-        v-for="item in trades"
+        v-for="item in filteredTrades"
         :key="item.id"
         :title="item.title"
         :tags="[
@@ -64,8 +87,6 @@ function formatPrice(p: number): string {
 <style scoped>
 .page { padding-bottom: 32px; }
 h2 { margin: 0 0 20px; color: #0c1424; font-size: 22px; }
-.state-msg { text-align: center; color: #6a8bb0; padding: 40px; }
-.state-msg.error { color: #c0392b; }
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

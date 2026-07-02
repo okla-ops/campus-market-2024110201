@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useFavoriteStore } from '@/stores/favorite'
 import { getTrades } from '@/api/trade'
@@ -8,6 +9,7 @@ import { getGroupBuys } from '@/api/groupBuy'
 import { getErrands } from '@/api/errand'
 import EmptyState from '@/components/EmptyState.vue'
 
+const router = useRouter()
 const user = useUserStore()
 const fav = useFavoriteStore()
 
@@ -15,6 +17,10 @@ const loading = ref(true)
 const myPublishCount = ref(0)
 
 onMounted(async () => {
+  if (!user.isLoggedIn) {
+    loading.value = false
+    return
+  }
   try {
     const [trades, lost, buys, errs] = await Promise.all([
       getTrades(),
@@ -34,58 +40,66 @@ onMounted(async () => {
     loading.value = false
   }
 })
+
+function handleLogout() {
+  user.logout()
+  router.push('/home')
+}
 </script>
 
 <template>
   <section class="page">
     <h2>个人主页</h2>
 
-    <div class="profile-card">
-      <div class="avatar">{{ user.initial }}</div>
-      <h3>{{ user.nickname }}</h3>
-      <div class="profile-info">
-        <div class="info-row"><span class="info-label">学号</span><span>{{ user.studentId }}</span></div>
-        <div class="info-row"><span class="info-label">学院</span><span>{{ user.college }}</span></div>
-        <div class="info-row"><span class="info-label">手机</span><span>{{ user.phone }}</span></div>
-      </div>
+    <div v-if="!user.isLoggedIn" class="unlogged">
+      <p>您尚未登录，请先登录后查看个人主页</p>
+      <router-link to="/login" class="btn btn-primary">前往登录</router-link>
     </div>
 
-    <div class="menu-list">
-      <router-link to="/publish" class="menu-item">
-        <span class="menu-icon">📝</span>
-        <span class="menu-label">我的发布</span>
-        <span class="menu-count">{{ loading ? '...' : myPublishCount }}</span>
-        <span class="menu-arrow">›</span>
-      </router-link>
-      <router-link to="/trade" class="menu-item">
-        <span class="menu-icon">⭐</span>
-        <span class="menu-label">我的收藏</span>
-        <span class="menu-count" v-if="fav.count">{{ fav.count }}</span>
-        <span class="menu-arrow">›</span>
-      </router-link>
-      <div class="menu-item">
-        <span class="menu-icon">⚙️</span>
-        <span class="menu-label">账号设置</span>
-        <span class="menu-arrow">›</span>
+    <template v-else>
+      <div class="profile-card">
+        <div class="avatar">{{ user.initial }}</div>
+        <h3>{{ user.nickname }}</h3>
+        <div class="profile-info">
+          <div class="info-row"><span class="info-label">学号</span><span>{{ user.studentId }}</span></div>
+          <div class="info-row"><span class="info-label">学院</span><span>{{ user.college }}</span></div>
+          <div class="info-row"><span class="info-label">手机</span><span>{{ user.phone }}</span></div>
+        </div>
+        <button class="btn-logout" @click="handleLogout">退出登录</button>
       </div>
-      <div class="menu-item">
-        <span class="menu-icon">📖</span>
-        <span class="menu-label">使用帮助</span>
-        <span class="menu-arrow">›</span>
-      </div>
-    </div>
 
-    <div class="fav-section" v-if="fav.count">
-      <h3>我的收藏 ({{ fav.count }})</h3>
-      <div class="fav-list">
-        <div v-for="item in fav.items" :key="`${item.type}-${item.id}`" class="fav-item">
-          <span class="fav-type">{{ item.type }}</span>
-          <span class="fav-title">{{ item.title }}</span>
-          <button class="fav-remove" @click="fav.toggle(item.type, item.id, item.title)">取消</button>
+      <div class="menu-list">
+        <router-link to="/publish" class="menu-item">
+          <span class="menu-icon">📝</span>
+          <span class="menu-label">我的发布</span>
+          <span class="menu-count">{{ loading ? '...' : myPublishCount }}</span>
+          <span class="menu-arrow">›</span>
+        </router-link>
+        <router-link to="/trade" class="menu-item">
+          <span class="menu-icon">⭐</span>
+          <span class="menu-label">我的收藏</span>
+          <span class="menu-count" v-if="fav.count">{{ fav.count }}</span>
+          <span class="menu-arrow">›</span>
+        </router-link>
+        <div class="menu-item" @click="handleLogout" style="cursor:pointer">
+          <span class="menu-icon">🚪</span>
+          <span class="menu-label">退出登录</span>
+          <span class="menu-arrow">›</span>
         </div>
       </div>
-    </div>
-    <EmptyState v-else message="暂无收藏" />
+
+      <div class="fav-section" v-if="fav.count">
+        <h3>我的收藏 ({{ fav.count }})</h3>
+        <div class="fav-list">
+          <div v-for="item in fav.items" :key="`${item.type}-${item.id}`" class="fav-item">
+            <span class="fav-type">{{ item.type }}</span>
+            <span class="fav-title">{{ item.title }}</span>
+            <button class="fav-remove" @click="fav.toggle(item.type, item.id, item.title)">取消</button>
+          </div>
+        </div>
+      </div>
+      <EmptyState v-else message="暂无收藏" />
+    </template>
   </section>
 </template>
 
@@ -188,4 +202,31 @@ h3 { margin: 0 0 12px; font-size: 15px; color: #0c1424; }
   color: #c0392b;
 }
 .fav-remove:hover { background: #fdecea; }
+.unlogged { text-align: center; padding: 60px 20px; color: #6a8bb0; }
+.unlogged p { margin-bottom: 16px; font-size: 14px; }
+.btn {
+  display: inline-block;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #b4d4f5, #8bb8e8);
+  color: #fff;
+}
+.btn-primary:hover { opacity: 0.9; }
+.btn-logout {
+  margin-top: 12px;
+  padding: 6px 16px;
+  border: 1px solid rgba(248,215,227,0.5);
+  border-radius: 6px;
+  background: transparent;
+  font-size: 12px;
+  cursor: pointer;
+  color: #c0392b;
+}
+.btn-logout:hover { background: #fdecea; }
 </style>

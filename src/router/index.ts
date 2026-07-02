@@ -64,6 +64,19 @@ const router = createRouter({
         },
       ],
     },
+    // 登录 / 注册（独立页面，不继承 AppLayout）
+    {
+      path: '/login',
+      name: 'login',
+      meta: { title: '登录' },
+      component: () => import('../views/LoginView.vue'),
+    },
+    {
+      path: '/register',
+      name: 'register',
+      meta: { title: '注册' },
+      component: () => import('../views/RegisterView.vue'),
+    },
     // 404 无效地址自动跳转首页
     {
       path: '/:pathMatch(.*)*',

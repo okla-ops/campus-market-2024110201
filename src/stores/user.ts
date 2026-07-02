@@ -2,31 +2,62 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
 export const useUserStore = defineStore('user', () => {
-  const nickname = ref('张同学')
+  const nickname = ref('')
   const avatar = ref('')
-  const studentId = ref('2024****0123')
-  const college = ref('信息科学与技术学院')
-  const phone = ref('138****1234')
-  const publishedCount = ref(3)
+  const studentId = ref('')
+  const college = ref('')
+  const phone = ref('')
 
-  const initial = computed(() => nickname.value.charAt(0))
+  const isLoggedIn = computed(() => !!nickname.value)
+  const initial = computed(() => nickname.value ? nickname.value.charAt(0) : '')
 
-  function updateProfile(data: Partial<{
+  function login(userData: {
     nickname: string
-    avatar: string
+    avatar?: string
     studentId: string
     college: string
     phone: string
-  }>) {
-    if (data.nickname !== undefined) nickname.value = data.nickname
-    if (data.avatar !== undefined) avatar.value = data.avatar
-    if (data.studentId !== undefined) studentId.value = data.studentId
-    if (data.college !== undefined) college.value = data.college
-    if (data.phone !== undefined) phone.value = data.phone
+  }) {
+    nickname.value = userData.nickname
+    avatar.value = userData.avatar || ''
+    studentId.value = userData.studentId
+    college.value = userData.college
+    phone.value = userData.phone
+    localStorage.setItem('user', JSON.stringify({
+      nickname: nickname.value,
+      avatar: avatar.value,
+      studentId: studentId.value,
+      college: college.value,
+      phone: phone.value,
+    }))
+  }
+
+  function logout() {
+    nickname.value = ''
+    avatar.value = ''
+    studentId.value = ''
+    college.value = ''
+    phone.value = ''
+    localStorage.removeItem('user')
+  }
+
+  function restoreSession() {
+    const saved = localStorage.getItem('user')
+    if (!saved) return
+    try {
+      const data = JSON.parse(saved)
+      nickname.value = data.nickname || ''
+      avatar.value = data.avatar || ''
+      studentId.value = data.studentId || ''
+      college.value = data.college || ''
+      phone.value = data.phone || ''
+    } catch {
+      logout()
+    }
   }
 
   return {
     nickname, avatar, studentId, college, phone,
-    publishedCount, initial, updateProfile,
+    isLoggedIn, initial, login, logout, restoreSession,
   }
 })

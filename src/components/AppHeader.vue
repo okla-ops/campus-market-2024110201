@@ -10,8 +10,15 @@ const user = useUserStore()
     <div class="logo">✦ 校园轻集市</div>
     <AppNav />
     <div class="user-badge">
-      <span class="user-avatar">{{ user.initial }}</span>
-      <span class="user-name">{{ user.nickname }}</span>
+      <template v-if="user.isLoggedIn">
+        <span class="user-avatar">{{ user.initial }}</span>
+        <span class="user-name">{{ user.nickname }}</span>
+      </template>
+      <template v-else>
+        <router-link to="/login" class="auth-link">登录</router-link>
+        <span class="auth-divider">/</span>
+        <router-link to="/register" class="auth-link">注册</router-link>
+      </template>
     </div>
   </header>
 </template>
@@ -39,9 +46,18 @@ const user = useUserStore()
   font-size: 13px;
   color: #4a6a8a;
 }
-</style>
-
-<style scoped>
+.auth-link {
+  font-size: 13px;
+  color: #4a6a8a;
+  text-decoration: none;
+}
+.auth-link:hover {
+  color: #b4d4f5;
+}
+.auth-divider {
+  font-size: 13px;
+  color: #a0b8d0;
+}
 .topbar {
   display: flex;
   align-items: center;

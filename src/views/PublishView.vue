@@ -103,6 +103,12 @@ function validate(): boolean {
 }
 
 async function handleSubmit() {
+  if (!user.isLoggedIn) {
+    feedback.show = true
+    feedback.ok = false
+    feedback.msg = '请先登录后再发布'
+    return
+  }
   if (!validate()) return
   submitting.value = true
   feedback.show = false
@@ -163,12 +169,13 @@ async function handleSubmit() {
     feedback.msg = '发布成功！即将跳转到列表页'
 
     setTimeout(() => {
-      router.push(routeMap[activeType.value])
+      const path = routeMap[activeType.value]
+      if (path) router.push(path)
     }, 1000)
   } catch {
     feedback.show = true
     feedback.ok = false
-    feedback.msg = '提交失败，请确认 Mock 服务已启动（npm run mock）'
+    feedback.msg = '提交失败，请检查 Mock 服务是否正常运行'
   } finally {
     submitting.value = false
   }

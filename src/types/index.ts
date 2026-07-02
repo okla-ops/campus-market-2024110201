@@ -1,3 +1,5 @@
+export type ItemStatus = 'open' | 'closed' | 'done'
+
 export interface Trade {
   id: number
   title: string
@@ -7,9 +9,9 @@ export interface Trade {
   publisher: string
   publishedAt: string
   location: string
-  images: string[]
-  status: 'open' | 'closed'
   description: string
+  status: ItemStatus
+  images: string[]
 }
 
 export interface LostFound {
@@ -17,13 +19,13 @@ export interface LostFound {
   title: string
   type: '丢失' | '捡到'
   itemName: string
-  location: string
   lostTime?: string
   foundTime?: string
   contact: string
+  location: string
   description: string
-  status: 'open' | 'done'
-  remark?: string
+  publisher: string
+  status: ItemStatus
 }
 
 export interface GroupBuy {
@@ -34,9 +36,9 @@ export interface GroupBuy {
   currentCount: number
   deadline: string
   location: string
-  publisher: string
-  status: 'open' | 'closed'
   description: string
+  publisher: string
+  status: ItemStatus
 }
 
 export interface Errand {
@@ -47,10 +49,10 @@ export interface Errand {
   pickup: string
   delivery: string
   deadline: string
-  publisher: string
-  status: 'open' | 'done'
+  location: string
   description: string
-  remark?: string
+  publisher: string
+  status: ItemStatus
 }
 
 export interface Message {
@@ -63,11 +65,19 @@ export interface Message {
 }
 
 export interface Profile {
-  id: number
   nickname: string
   avatar: string
   studentId: string
   college: string
   phone: string
   publishedCount: number
-} 
+}
+
+export interface User {
+  id?: string | number
+  nickname: string
+  studentId: string
+  college: string
+  phone: string
+  password: string
+}
